@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programa 4 Semanas · Gabi Vila Real</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap');
+
+  :root {
+    --sand: #E8DCC8;
+    --sand-light: #F5EFE3;
+    --ink: #1A1612;
+    --ink-soft: #3D3530;
+    --areia: #C4A97D;
+    --alert: #D4522A;
+    --ok: #4A7C59;
+    --caution: #C4882A;
+    --muted: #8A7D6E;
+    --border: #D4C8B0;
+    --white: #FDFAF5;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--sand-light);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--ink);
+    color: var(--sand);
+    padding: 28px 24px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-top {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: 0.04em;
+    color: var(--areia);
+  }
+  .tagline {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .header-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  /* WEEK NAV */
+  .week-nav {
+    background: var(--ink);
+    border-top: 1px solid #2E2820;
+    padding: 0 24px 16px;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+  }
+  .week-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    background: transparent;
+    border: 1px solid #3D3530;
+    color: var(--muted);
+    padding: 6px 16px;
+    border-radius: 2px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .week-btn.active {
+    background: var(--areia);
+    border-color: var(--areia);
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .week-btn:hover:not(.active) {
+    border-color: var(--areia);
+    color: var(--sand);
+  }
+
+  /* WEEK FOCUS BANNER */
+  .week-focus {
+    background: var(--ink-soft);
+    color: var(--sand);
+    padding: 12px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .week-focus .label {
+    color: var(--areia);
+    font-weight: 500;
+  }
+
+  /* DAY NAV */
+  .day-nav {
+    padding: 16px 24px 0;
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+  }
+  .day-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 14px;
+    border-radius: 2px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .day-btn.active {
+    background: var(--sand);
+    border-color: var(--areia);
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .day-btn.done::after {
+    content: '✓';
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: var(--ok);
+    color: white;
+    font-size: 8px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .day-btn:hover:not(.active) {
+    border-color: var(--areia);
+    color: var(--ink);
+  }
+
+  /* MAIN */
+  .main {
+    padding: 20px 24px 60px;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  /* DAY HEADER */
+  .day-header {
+    margin-bottom: 20px;
+  }
+  .day-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+  .day-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .day-meta .pill {
+    background: var(--sand);
+    border: 1px solid var(--border);
+    padding: 2px 10px;
+    border-radius: 2px;
+    font-size: 10px;
+  }
+  .day-meta .pill.sand { border-color: var(--areia); color: var(--areia); }
+  .day-meta .pill.alert { border-color: var(--alert); color: var(--alert); }
+
+  /* ALERT BOX */
+  .alert-box {
+    background: #FDF3EE;
+    border-left: 3px solid var(--alert);
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    font-size: 12px;
+    color: var(--ink-soft);
+    border-radius: 0 4px 4px 0;
+  }
+  .alert-box strong { color: var(--alert); }
+
+  .caution-box {
+    background: #FDF7EE;
+    border-left: 3px solid var(--caution);
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    font-size: 12px;
+    color: var(--ink-soft);
+    border-radius: 0 4px 4px 0;
+  }
+  .caution-box strong { color: var(--caution); }
+
+  .ok-box {
+    background: #EEF4F0;
+    border-left: 3px solid var(--ok);
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    font-size: 12px;
+    color: var(--ink-soft);
+    border-radius: 0 4px 4px 0;
+  }
+
+  /* BLOCK */
+  .block {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+  .block-header {
+    padding: 12px 16px 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .block-header:hover { background: var(--sand-light); }
+  .block-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .block-icon {
+    font-size: 16px;
+    width: 24px;
+    text-align: center;
+  }
+  .block-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .block-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 2px 8px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+  }
+  .block-chevron {
+    color: var(--muted);
+    font-size: 12px;
+    transition: transform 0.2s;
+  }
+  .block.collapsed .block-chevron { transform: rotate(-90deg); }
+  .block-body { padding: 0; }
+  .block.collapsed .block-body { display: none; }
+
+  /* EXERCISE */
+  .exercise {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--sand-light);
+    display: grid;
+    grid-template-columns: 28px 1fr auto;
+    gap: 8px;
+    align-items: start;
+  }
+  .exercise:last-child { border-bottom: none; }
+  .ex-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--areia);
+    font-weight: 500;
+    padding-top: 2px;
+  }
+  .ex-name {
+    font-weight: 500;
+    font-size: 13px;
+    margin-bottom: 2px;
+  }
+  .ex-detail {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .ex-note {
+    font-size: 11px;
+    color: var(--ink-soft);
+    background: var(--sand-light);
+    padding: 5px 8px;
+    border-radius: 3px;
+    margin-top: 4px;
+    border-left: 2px solid var(--areia);
+  }
+  .ex-note.red { border-left-color: var(--alert); background: #FDF3EE; }
+  .ex-tags {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+  .ex-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.05em;
+    padding: 1px 6px;
+    border-radius: 2px;
+    background: var(--sand);
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .ex-tag.alert { background: #FDF3EE; color: var(--alert); border-color: #F5C4B4; }
+  .ex-tag.ok { background: #EEF4F0; color: var(--ok); border-color: #B4D4BE; }
+  .ex-done-btn {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    transition: all 0.15s;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .ex-done-btn.checked {
+    background: var(--ok);
+    border-color: var(--ok);
+    color: white;
+  }
+
+  /* TIMER */
+  .timer-row {
+    background: var(--sand);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 6px;
+    cursor: pointer;
+  }
+  .timer-display {
+    font-family: 'DM Mono', monospace;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ink);
+    min-width: 50px;
+  }
+  .timer-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    flex: 1;
+  }
+  .timer-btn {
+    background: var(--ink);
+    color: var(--sand);
+    border: none;
+    border-radius: 2px;
+    padding: 4px 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+  }
+  .timer-btn.running {
+    background: var(--alert);
+  }
+
+  /* REST DIVIDER */
+  .rest-divider {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    background: var(--sand-light);
+    border-bottom: 1px solid var(--sand);
+  }
+  .rest-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+  }
+
+  /* PROGRESS BAR */
+  .progress-strip {
+    background: var(--sand);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+  }
+  .progress-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .progress-bar {
+    background: var(--border);
+    height: 4px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    background: var(--areia);
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  /* DONE BUTTON */
+  .done-day-btn {
+    width: 100%;
+    background: var(--ink);
+    color: var(--sand);
+    border: none;
+    border-radius: 4px;
+    padding: 14px;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    margin-top: 8px;
+    transition: all 0.15s;
+  }
+  .done-day-btn:hover { background: var(--ink-soft); }
+  .done-day-btn.done {
+    background: var(--ok);
+    color: white;
+  }
+
+  /* FIFA 11 STEPS */
+  .steps-list {
+    padding: 12px 16px;
+  }
+  .step-item {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--sand-light);
+    align-items: flex-start;
+  }
+  .step-item:last-child { border-bottom: none; }
+  .step-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--areia);
+    min-width: 24px;
+    padding-top: 1px;
+  }
+  .step-text {
+    font-size: 12px;
+    flex: 1;
+  }
+  .step-text strong { font-weight: 500; }
+  .step-detail {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* REST DAY */
+  .rest-day {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--muted);
+  }
+  .rest-day .rest-icon { font-size: 36px; margin-bottom: 12px; }
+  .rest-day .rest-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .rest-day .rest-desc { font-size: 13px; line-height: 1.6; }
+
+  /* PROGRESSION BADGE */
+  .prog-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--ink);
+    color: var(--areia);
+    border-radius: 3px;
+    padding: 4px 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+  }
+
+  /* WEEK OVERVIEW */
+  .week-overview {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    padding: 16px 24px 0;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  .ov-cell {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 6px 4px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .ov-cell.active { border-color: var(--areia); background: var(--sand); }
+  .ov-cell.done { border-color: var(--ok); background: #EEF4F0; }
+  .ov-cell .ov-day {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 3px;
+  }
+  .ov-cell .ov-type {
+    font-size: 16px;
+    line-height: 1;
+  }
+  .ov-cell .ov-label {
+    font-size: 9px;
+    color: var(--muted);
+    margin-top: 3px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  @media (max-width: 480px) {
+    .header { padding: 20px 16px 14px; }
+    .week-nav { padding: 0 16px 12px; }
+    .week-focus { padding: 10px 16px; }
+    .day-nav { padding: 12px 16px 0; }
+    .main { padding: 16px 16px 60px; }
+    .week-overview { padding: 12px 16px 0; }
+  }
+
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <span class="logo">BEACHMED</span>
+    <span class="tagline">Além da areia, existe ciência</span>
+  </div>
+  <div class="header-subtitle">Gabi Vila Real · CREFITO 261789-F · Programa 4 Semanas</div>
+</div>
+
+<div class="week-nav" id="weekNav"></div>
+<div class="week-focus" id="weekFocus"></div>
+
+<div class="week-overview" id="weekOverview"></div>
+<div class="day-nav" id="dayNav"></div>
+
+<div class="main" id="mainContent"></div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────────────
+
+const WEEKS = [
+  {
+    num: 1,
+    label: "S1 · BASE",
+    focus: "Volume baixo · Adaptação · Carga leve",
+    desc: "Semana de adaptação. Foco em técnica, ativação muscular e manejo das dores. Nenhum exercício que provoque dor ≥ 4/10.",
+    days: makeDays(1)
+  },
+  {
+    num: 2,
+    label: "S2 · VOLUME",
+    focus: "Volume moderado · Progressão de séries",
+    desc: "Aumenta volume. Exercícios mais desafiadores. Monitora joelho e fáscia.",
+    days: makeDays(2)
+  },
+  {
+    num: 3,
+    label: "S3 · CARGA",
+    focus: "Intensidade ↑ · Carga moderada-alta",
+    desc: "Progressão de carga. Introdução de variantes mais exigentes.",
+    days: makeDays(3)
+  },
+  {
+    num: 4,
+    label: "S4 · PICO",
+    focus: "Pico de intensidade · Reavaliar na sequência",
+    desc: "Semana mais intensa. Avalia sintomas ao final para ajuste do próximo bloco.",
+    days: makeDays(4)
+  }
+];
+
+function makeDays(w) {
+  return [
+    daySegunda(w),
+    dayTerca(w),
+    dayQuarta(w),
+    dayQuinta(w),
+    daySexta(w),
+    daySabado(),
+    dayDomingo(w)
+  ];
+}
+
+// ─── SEGUNDA: MUSCULAÇÃO ────────────────────────────────────────────────────
+function daySegunda(w) {
+  const vol = [
+    ["3×10","3×12","4×10","4×12"],
+    ["3×10","3×12","4×10","4×12"],
+    ["3×12","3×15","4×12","4×15"],
+    ["3×12","3×15","3×12","3×12"],
+  ];
+  const v = (i) => vol[i][w-1];
+
+  return {
+    id: "seg",
+    label: "SEG",
+    icon: "🏋️",
+    type: "academia",
+    title: "Segunda · Academia",
+    subtitle: "Foco posterior de coxa, glúteo, core, MMSS · Joelho e fáscia monitorados",
+    pills: ["60–70 min", "Musculação"],
+    alert: null,
+    caution: "Joelho patelar: evite agachamento profundo unilateral. Substitua por variantes indicadas abaixo.",
+    blocks: [
+      {
+        icon: "🌡️",
+        title: "Aquecimento",
+        tag: "10 min",
+        exercises: [
+          {
+            name: "Bicicleta ergométrica",
+            detail: `5 min · leve · sem impacto`,
+            note: "Sem carga. Aquece sem agravar fáscia.",
+            tags: ["fáscia OK","joelho OK"],
+            rest: null
+          },
+          {
+            name: "CARs de quadril + mobilidade de tornozelo",
+            detail: `5 min · articular`,
+            note: "Circundução completa do quadril (5 cada lado). Mobilidade ativa de tornozelo D prioritária.",
+            tags: [],
+            rest: null
+          }
+        ]
+      },
+      {
+        icon: "🦵",
+        title: "Força Principal",
+        tag: "35 min",
+        exercises: [
+          {
+            name: "Leg Press Unilateral",
+            detail: `${v(0)} · 70s descanso`,
+            note: "ADM de 90°. Inicia pelo lado D. Controla o joelho — sem valgo. Se dor ≥ 3/10 → reduz carga.",
+            tags: ["joelho monitor","fáscia OK","unilateral"],
+            rest: {label:"Descanso", s: w<=2 ? 70 : 60}
+          },
+          {
+            name: "Mesa Flexora · Excêntrico",
+            detail: `${v(1)} · 4s descida · 90s descanso`,
+            note: "Concêntrico normal → excêntrico 4 contagens. Principal exercício de prevenção de isquiotibiais para areia.",
+            tags: ["isquiotibiais","prevenção areia"],
+            rest: {label:"Descanso", s: 90}
+          },
+          {
+            name: "Extensora · Isometria",
+            detail: `${v(2).replace("×","× ")} · 30s hold · ângulo 60–70° · 90s descanso`,
+            note: "Isometria em ângulo de maior torque — melhor opção para dor patelar anterior. Sem movimento dinâmico.",
+            tags: ["joelho patelar","isometria","seguro"],
+            rest: {label:"Descanso", s: 90}
+          },
+          {
+            name: "Panturrilha Excêntrica Unilateral",
+            detail: `${v(3)} · 3s descida · 60s descanso`,
+            note: "Sobe bilateral → desce unilateral (3s). Protocolo Alfredson modificado. Dor leve 2–3/10 aceitável.",
+            tags: ["fáscia plantar","protocolo excêntrico"],
+            rest: {label:"Descanso", s: 60}
+          },
+          {
+            name: "Copenhagen Adução Isométrica",
+            detail: `3×20s cada lado · 60s descanso`,
+            note: "Perna de cima no banco → eleva quadril → segura. Maior músculo lesionado em beach. Mantém em todas as semanas.",
+            tags: ["adutores","prevenção","unilateral"],
+            rest: {label:"Descanso", s: 60}
+          },
+          {
+            name: "Supino com Haltere",
+            detail: `${["3×10","3×12","4×10","4×12"][w-1]} · 60s descanso`,
+            note: "Padrão de empurrar horizontal. Ativa peitoral, tríceps e deltoide anterior. Transfere para o balanço de braços no salto de ataque — melhora estabilidade de ombro no gesto aéreo.",
+            tags: ["MMSS","empurrar","potência"],
+            rest: {label:"Descanso", s: 60}
+          }
+        ]
+      },
+      {
+        icon: "🔒",
+        title: "Core",
+        tag: "15 min",
+        exercises: [
+          {
+            name: "Prancha Lateral",
+            detail: `3×${w<=2?"35s":"45s"} cada lado · 45s descanso`,
+            note: "Quadril não afunda. Progressão: +5s a cada semana.",
+            tags: ["quadrado lombar","isometria"],
+            rest: {label:"Descanso", s: 45}
+          },
+          {
+            name: "Dead Bug",
+            detail: `3×6 rep · 5s hold por posição`,
+            note: "Lombar colada no chão. Braço oposto + perna contralateral. Controle anti-rotação.",
+            tags: ["anti-rotação","core"],
+            rest: null
+          },
+          {
+            name: "Abdução na Polia Baixa",
+            detail: `3×15 rep/lado · 45s descanso`,
+            note: "Glúteo médio. Cabo no tornozelo. Estabilização de tronco — transferência direta para areia.",
+            tags: ["glúteo médio","unilateral"],
+            rest: {label:"Descanso", s: 45}
+          }
+        ]
+      }
+    ]
+  };
+}
+
+// ─── TERÇA: FUTEVÔLEI ───────────────────────────────────────────────────────
+function dayTerca(w) {
+  const nivelFifa = ["Nível 1","Nível 1","Nível 2","Nível 2"][w-1];
+  return {
+    id: "ter",
+    label: "TER",
+    icon: "⚽",
+    type: "areia",
+    title: "Terça · Futevôlei",
+    subtitle: "Treino em areia · Protocolo fáscia pós-treino",
+    pills: ["Areia", "FIFA 11+"],
+    alert: "Fáscia plantar: bolinha na planta do pé D por 60s antes de pisar na areia.",
+    caution: null,
+    blocks: [
+      {
+        icon: "⚽",
+        title: `FIFA 11+ · Pré-treino · Nível ${nivelFifa} · 20 min`,
+        tag: "20 min",
+        exercises: [],
+        fifa: buildFifa(w, false)
+      },
+      {
+        icon: "🦶",
+        title: "Protocolo Fáscia · Pós-treino",
+        tag: "10 min",
+        exercises: [],
+        fasciaProtocol: buildFascia(w)
+      }
+    ]
+  };
+}
+
+// ─── QUARTA: MUSCULAÇÃO ─────────────────────────────────────────────────────
+function dayQuarta(w) {
+  const vol = [
+    ["3×10","3×10","3×12"],
+    ["3×12","3×10","3×12"],
+    ["4×10","3×12","4×12"],
+    ["4×12","4×10","4×12"],
+  ];
+  const v = (i) => vol[i][w-1];
+  return {
+    id: "qua",
+    label: "QUA",
+    icon: "🏋️",
+    type: "academia",
+    title: "Quarta · Academia",
+    subtitle: "Foco em força reativa, MMSS e estabilidade · Pós-areia (ter)",
+    pills: ["65 min", "Musculação"],
+    alert: null,
+    caution: "Segundo dia seguido ao descanso. Carga moderada. Não force se sentir dor no joelho D acima de 3/10.",
+    blocks: [
+      {
+        icon: "🌡️",
+        title: "Aquecimento",
+        tag: "8 min",
+        exercises: [
+          {
+            name: "Mobilidade dinâmica",
+            detail: "5 min · quadril + tornozelo + coluna",
+            note: "CARs de quadril. Prioridade tornozelo D.",
+            tags: [],
+            rest: null
+          },
+          {
+            name: "Bike ergométrica",
+            detail: "3 min · leve",
+            note: null,
+            tags: ["fáscia OK"],
+            rest: null
+          }
+        ]
+      },
+      {
+        icon: "⚡",
+        title: "Força + Reativo",
+        tag: "35 min",
+        exercises: [
+          {
+            name: "RDL Unilateral · Excêntrico",
+            detail: `${v(0)} · 3s descida · 60s descanso`,
+            note: "Cadeia posterior + propriocepção. Descida controlada 3s. Essencial para desaceleração de chute.",
+            tags: ["isquiotibiais","tornozelo","unilateral"],
+            rest: {label:"Descanso", s: 60}
+          },
+          {
+            name: "Wall Sit Unilateral",
+            detail: `${w<=2?"3×35s":"4×45s"} cada lado · 90s descanso`,
+            note: `Joelho 90° na parede. Progressão: S1=35s → S4=50s. Isometria segura para dor patelar.`,
+            tags: ["joelho isometria","quadríceps"],
+            rest: {label:"Descanso", s: 90}
+          },
+          {
+            name: `Salto Vertical Bilateral ${w>=3?"+ Hold aterrissagem":"· Bilateral"}`,
+            detail: `${v(1)} · ${w<=2?"aterrissagem controlada":"hold 2s na aterrissagem"} · 90s descanso`,
+            note: w<=2?"Semanas 1–2: bilateral simples, foco na aterrissagem em amortecimento.":"Semanas 3–4: segura 2s ao aterrissar, estimula controle reativo.",
+            tags: ["pliometria","SSC","joelho monitor"],
+            rest: {label:"Descanso", s: 90}
+          },
+          {
+            name: "Remada com Barra (pendente ou apoiada)",
+            detail: `${v(2)} · 60s descanso`,
+            note: "Padrão de puxar horizontal com barra — maior carga neural que haltere unilateral. Latíssimo + romboides + bíceps. Escápula retraída e deprimida no final. Introdução progressiva à barra livre.",
+            tags: ["MMSS","puxar","barra livre"],
+            rest: {label:"Descanso", s: 60}
+          }
+        ]
+      },
+      {
+        icon: "🔒",
+        title: "Core + Estabilidade",
+        tag: "15 min",
+        exercises: [
+          {
+            name: "Isometria de Tornozelo · Dorsiflexão com band",
+            detail: "3×30s por posição",
+            note: "Band no dorso do pé → resiste em dorsiflexão. Ativa tibial anterior, melhora controle ativo do arco.",
+            tags: ["fáscia plantar","tornozelo"],
+            rest: null
+          },
+          {
+            name: "Prancha + Toque de Ombro",
+            detail: `3×${w<=2?"8":"12"} reps · controlado`,
+            note: "Quadril estável. Anti-rotação. Sem compensação de quadril.",
+            tags: ["core","anti-rotação"],
+            rest: null
+          }
+        ]
+      }
+    ]
+  };
+}
+
+// ─── QUINTA: FUTEVÔLEI + JOGUINHO ───────────────────────────────────────────
+function dayQuinta(w) {
+  const nivelFifa = ["Nível 1","Nível 1","Nível 2","Nível 2"][w-1];
+  return {
+    id: "qui",
+    label: "QUI",
+    icon: "⚽",
+    type: "areia",
+    title: "Quinta · Futevôlei + Joguinho",
+    subtitle: "Manhã: treino em areia · Noite: jogo",
+    pills: ["2 sessões", "Areia"],
+    alert: "Dois dias seguidos de areia. Atenção redobrada ao pé D. Se dor ≥ 4/10 → reduz volume.",
+    caution: null,
+    blocks: [
+      {
+        icon: "⚽",
+        title: `FIFA 11+ Beach Soccer · Manhã · ${nivelFifa} (reduzido)`,
+        tag: "15 min",
+        exercises: [],
+        fifa: buildFifa(w, true)
+      },
+      {
+        icon: "🦶",
+        title: "Protocolo Fáscia · Pós-manhã",
+        tag: "10 min",
+        exercises: [],
+        fasciaProtocol: buildFascia(w)
+      },
+      {
+        icon: "🌙",
+        title: "Pré-jogo noturno",
+        tag: "15 min",
+        exercises: [
+          {
+            name: "Aquecimento leve",
+            detail: "10 min · corrida progressiva + mobilidade",
+            note: "Não faça FIFA 11+ completo novamente. Apenas mobilização e corrida leve.",
+            tags: [],
+            rest: null
+          },
+          {
+            name: "Rolo bolinha na planta do pé D",
+            detail: "60s antes de calçar",
+            note: "Obrigatório. Reduz tensão da fáscia antes do impacto na areia.",
+            tags: ["fáscia plantar"],
+            rest: null
+          }
+        ]
+      },
+      {
+        icon: "🦶",
+        title: "Protocolo Fáscia · Pós-jogo",
+        tag: "8 min",
+        exercises: [],
+        fasciaProtocol: buildFasciaLite()
+      }
+    ]
+  };
+}
+
+// ─── SEXTA: MUSCULAÇÃO ──────────────────────────────────────────────────────
+function daySexta(w) {
+  const vol = [
+    ["3×10","3×10","3×10"],
+    ["3×12","3×12","3×12"],
+    ["4×10","3×12","4×10"],
+    ["4×12","4×10","4×12"],
+  ];
+  const v = (i) => vol[i][w-1];
+  return {
+    id: "sex",
+    label: "SEX",
+    icon: "🏋️",
+    type: "academia",
+    title: "Sexta · Academia",
+    subtitle: "Pós-dois-dias de areia · Carga moderada · Controle excêntrico",
+    pills: ["60 min", "Musculação"],
+    alert: null,
+    caution: "Pós-dois-dias de areia + joguinho. Sem impacto, sem pliometria. Foco em qualidade de movimento.",
+    blocks: [
+      {
+        icon: "🌡️",
+        title: "Aquecimento",
+        tag: "8 min",
+        exercises: [
+          {
+            name: "Mobilidade + CARs",
+            detail: "5 min",
+            note: null,
+            tags: [],
+            rest: null
+          },
+          {
+            name: "Bike ergométrica",
+            detail: "3 min · leve",
+            note: null,
+            tags: ["fáscia OK"],
+            rest: null
+          }
+        ]
+      },
+      {
+        icon: "🧱",
+        title: "Isometria Pesada + Excêntrico",
+        tag: "30 min",
+        exercises: [
+          {
+            name: "Agachamento Goblet · Bilateral",
+            detail: `${v(0)} · ADM controlada · 70s descanso`,
+            note: "Kettlebell ou haltere na frente do peito. Bilateral = sem carga patelar unilateral. Desce até 90°, sem compensar joelho.",
+            tags: ["bilateral","joelho OK","quad"],
+            rest: {label:"Descanso", s: 70}
+          },
+          {
+            name: "Hip Thrust",
+            detail: `${v(1)} · 1s hold no topo · 60s descanso`,
+            note: "Glúteo máximo. Hold no topo ativa melhor. Fáscia OK — sem carga no pé.",
+            tags: ["glúteo","fáscia OK"],
+            rest: {label:"Descanso", s: 60}
+          },
+          {
+            name: "Nordic Hamstring · Excêntrico",
+            detail: `${v(2)} · cadência máxima de 5s na descida`,
+            note: `S${w}: ${w<=2?"3 séries, tolera leve queimação":"4 séries, progride carga com parceiro ou elástico"}. Principal prevenção de lesão muscular em atletas de areia.`,
+            tags: ["isquiotibiais","prevenção","excêntrico"],
+            rest: {label:"Descanso", s: 90}
+          },
+          {
+            name: "Panturrilha Excêntrica Unilateral",
+            detail: `3×12 · 3s descida`,
+            note: "Protocolo fáscia. Mantém em todas as sextas.",
+            tags: ["fáscia plantar"],
+            rest: {label:"Descanso", s: 60}
+          }
+        ]
+      },
+      {
+        icon: "🔗",
+        title: "MMSS + Estabilidade",
+        tag: "22 min",
+        exercises: [
+          {
+            name: "Desenvolvimento com Barra",
+            detail: `${v(2)} · 60s descanso`,
+            note: "Empurrar vertical com barra — mais estável que haltere para aprender o padrão. Ativa deltoide, trapézio superior e tríceps. Postura ereta, core ativado, sem hiperextensão lombar.",
+            tags: ["MMSS","empurrar","barra livre"],
+            rest: {label:"Descanso", s: 60}
+          },
+          {
+            name: "Pull-over com Haltere",
+            detail: `${["3×10","3×12","3×12","4×12"][w-1]} · 60s descanso`,
+            note: "Latíssimo + grande dorsal + core. Reproduz o arco do salto para ataque — braços sobem, tronco se projeta. Transferência direta para o gesto aéreo no futevôlei. Deitada no banco, haltere atrás da cabeça, desce e sobe controlado.",
+            tags: ["MMSS","latíssimo","transferência ataque"],
+            rest: {label:"Descanso", s: 60}
+          },
+          {
+            name: "Prancha Lateral Isométrica",
+            detail: `3×${w<=2?"35s":"45s"} cada lado`,
+            note: "Quadrado lombar. Progressão: +5s por semana.",
+            tags: ["core","lateral"],
+            rest: null
+          },
+          {
+            name: "Copenhagen Dinâmico",
+            detail: `3×${w<=2?"8":"10"} rep/lado · 60s descanso`,
+            note: "Perna de cima no banco → perna de baixo sobe e desce. Adutores — principal grupo lesionado em areia.",
+            tags: ["adutores","prevenção areia"],
+            rest: {label:"Descanso", s: 60}
+          }
+        ]
+      }
+    ]
+  };
+}
+
+function daySabado() {
+  return {
+    id: "sab",
+    label: "SÁB",
+    icon: "😴",
+    type: "descanso",
+    title: "Sábado · Descanso",
+    subtitle: "Recuperação ativa",
+    rest: true,
+    restContent: {
+      icon: "🌊",
+      title: "Recuperação Ativa",
+      items: [
+        "Caminhada leve (20–30 min) — descalça na grama, não na areia",
+        "Foam rolling: panturrilha, posterior de coxa, glúteo",
+        "Gelo no pé D se sentir dor após a semana",
+        "Hidratação — mínimo 2,5L",
+        "Se sentir o pé bem: 5 min bolinha + excêntrico de panturrilha (opcional)"
+      ]
+    }
+  };
+}
+
+function dayDomingo(w) {
+  // Progressão por semana
+  const jumpVol  = ["3×6","3×8","4×8","4×10"][w-1];
+  const boundVol = ["3×4/lado","3×5/lado","4×5/lado","4×6/lado"][w-1];
+  const hopVol   = ["3×6","3×8","4×8","4×10"][w-1];
+  const sprintVol= ["4×10m","4×10m","5×10m","6×10m"][w-1];
+  const ankleVol = ["3×20s","3×25s","3×30s","4×30s"][w-1];
+  const sspNote  = [
+    "S1: bilateral, foco na aterrissagem. Contato mínimo com o solo antes de saltar novamente.",
+    "S2: bilateral, aumenta a intenção de velocidade de contato.",
+    "S3: introduz variante unilateral alternada — salta no D, aterrissa, salta no E.",
+    "S4: unilateral contínuo — 5 contatos no mesmo pé antes de trocar."
+  ][w-1];
+
+  return {
+    id: "dom",
+    label: "DOM",
+    icon: "⚡",
+    type: "areia",
+    title: "Domingo · Reatividade na Areia",
+    subtitle: "Rigidez de tornozelo · SSC · Potência · 50–60 min · Descalço",
+    pills: ["Areia", "50–60 min", "Reatividade"],
+    alert: null,
+    caution: "Pé direito: se EVA ≥ 3 em qualquer salto → substitui por variante bilateral ou cancela o exercício. Não compensa dor com técnica.",
+    blocks: [
+      {
+        icon: "🌡️",
+        title: "Aquecimento Neural",
+        tag: "12 min",
+        exercises: [
+          {
+            name: "Caminhada ativa + mobilidade",
+            detail: "3 min · tornozelo, quadril, coluna",
+            note: "Circundução de tornozelo D prioritária — 10 círculos ativos antes de qualquer salto.",
+            tags: [],
+            rest: null
+          },
+          {
+            name: "Skipping baixo na areia",
+            detail: "3×20m · contato rápido com o solo",
+            note: "Joelho baixo, contato de metatarso. Treina o reflexo de rigidez antes dos saltos.",
+            tags: ["tornozelo","SSC"],
+            rest: null
+          },
+          {
+            name: "Lateral shuffle",
+            detail: "3×10m cada lado · progressivo",
+            note: "Ativa glúteo médio e adutores. Aumenta velocidade progressivamente na 2ª e 3ª série.",
+            tags: [],
+            rest: null
+          },
+          {
+            name: "Sprint de aceleração",
+            detail: "4×15m · 60% → 80% → 90%",
+            note: "Sistema nervoso precisa estar ativo antes da pliometria. Não pule essa etapa.",
+            tags: [],
+            rest: null
+          }
+        ]
+      },
+      {
+        icon: "⚡",
+        title: "Pliometria + SSC",
+        tag: "25 min",
+        exercises: [
+          {
+            name: "Salto Vertical Bilateral",
+            detail: `${jumpVol} · aterrissagem em amortecimento · 90s descanso`,
+            note: "Sobe com intenção máxima. Aterrissagem: joelhos semiflexionados, quadril para trás, sem valgo. A areia já exige mais do que academia.",
+            tags: ["pliometria","joelho monitor"],
+            rest: { label: "Descanso", s: 90 }
+          },
+          {
+            name: "Salto com Corda / Pular Corda Rápido · Areia",
+            detail: `${hopVol} · contato mínimo · 90s descanso`,
+            note: "Sem corda? Simula o movimento: pulos rápidos no mesmo lugar com contato de metatarso. Rigidez de tornozelo = mola. " + sNote(w),
+            tags: ["SSC","rigidez tornozelo"],
+            rest: { label: "Descanso", s: 90 }
+          },
+          {
+            name: "Lateral Bound Unilateral",
+            detail: `${boundVol} · hold 2s na aterrissagem · 90s descanso`,
+            note: "Salto lateral em apoio único — especificidade máxima para futevôlei. Aterrissa, estabiliza 2s, volta. Pé D: se dor → reduz distância, não o exercício.",
+            tags: ["unilateral","joelho monitor","fáscia monitor"],
+            rest: { label: "Descanso", s: 90 }
+          },
+          {
+            name: "Depth Drop Reativo",
+            detail: `3×5 · cai da caixa (20cm) → rebate imediato · 2 min descanso`,
+            note: `SSC puro: cai → toca → salta sem pausa. Tempo de contato mínimo. ${w<=2?"S1–2: use degrau baixo ou pule da posição estática sem caixa.":"S3–4: use a caixa de salto."}`,
+            tags: ["SSC","força reativa"],
+            rest: { label: "Descanso", s: 120 }
+          },
+          {
+            name: "Sprint Reativo",
+            detail: `${sprintVol} · saída por estímulo (palma, gesto) · 2 min descanso`,
+            note: "Treina tempo de reação + aceleração. 100% de velocidade em cada sprint. Descanso completo entre eles — qualidade, não quantidade.",
+            tags: ["aceleração","reativo"],
+            rest: { label: "Descanso", s: 120 }
+          }
+        ]
+      },
+      {
+        icon: "🦶",
+        title: "Rigidez de Tornozelo · Miniband + Superband",
+        tag: "12 min",
+        exercises: [
+          {
+            name: "Isometria de Tornozelo em Dorsiflexão · Theraband",
+            detail: `${ankleVol} por posição · band no dorso do pé`,
+            note: "Band puxa para plantiflexão → você resiste em dorsiflexão. Ativa tibial anterior e intrínsecos do pé. Previne sobrecarga da fáscia.",
+            tags: ["tornozelo","fáscia plantar","isometria"],
+            rest: null
+          },
+          {
+            name: "Hop Unilateral na Areia · Miniband no tornozelo",
+            detail: `3×8/lado · miniband cria resistência lateral · 60s descanso`,
+            note: "Miniband no tornozelo D e E. Pequenos pulos unilaterais no lugar. A band força o tornozelo a estabilizar no plano frontal — demanda alta de perôneos.",
+            tags: ["tornozelo","unilateral","rigidez"],
+            rest: { label: "Descanso", s: 60 }
+          },
+          {
+            name: "Panturrilha Excêntrica Unilateral · Finalizador",
+            detail: `2×12 · descida 4s · sem carga extra`,
+            note: "Encerra com protocolo de fáscia. Volume baixo pós-pliometria. Bilateral sobe → unilateral desce 4s.",
+            tags: ["fáscia plantar","excêntrico"],
+            rest: null
+          }
+        ]
+      }
+    ]
+  };
+}
+
+function sNote(w) {
+  return ["S1: bilateral contínuo, foco em contato rápido.",
+          "S2: aumenta velocidade de contato.",
+          "S3: unilateral alternado — 4 pulos no D, 4 no E.",
+          "S4: unilateral contínuo — 6 pulos no mesmo pé."][w-1];
+}
+
+// ─── FIFA 11+ ────────────────────────────────────────────────────────────────
+function buildFifa(w, reduced) {
+  // reduced=false → terça | reduced=true → quinta (2º dia, volume reduzido)
+  // Estrutura fiel ao FIFA 11+ original: P1 Corrida / P2 Força+Equilíbrio+Pliometria / P3 Corrida alta intensidade
+  const nivel = w <= 2 ? 1 : 2;
+  const s = reduced ? '2' : '3'; // séries
+
+  // ── PARTE 1 ──────────────────────────────────────────────────────────────
+  const p1_terca = [
+    {n:"Corrida em linha reta", d:"ida e volta 2×"},
+    {n:"Corrida com circundução de quadril", d:"ida e volta 2×"},
+    {n:"Corrida com salto para ataque", d:"ida e volta 2× · corrida de abordagem → salto vertical → testa projeta para bola"},
+    {n:"Corrida com mudança de direção", d:"ida e volta 2× · mudança a cada cone (5m)"},
+    {n:"Sprint progressivo", d:"ida e volta 2× · 60%→80%→100%"},
+  ];
+  const p1_quinta = [
+    {n:"Corrida em linha reta", d:"ida e volta 2×"},
+    {n:"Corrida com circundução de quadril", d:"ida e volta 2×"},
+    {n:"Corrida + deslocamento para pingo", d:"ida e volta 2× · corta em diagonal ao sinal, busca bola longa distante"},
+    {n:"Corrida com mudança de direção", d:"ida e volta 2×"},
+    {n:"Sprint progressivo (reduzido)", d:"ida e volta 1× · 70%→100%"},
+  ];
+  const p1 = reduced ? p1_quinta : p1_terca;
+
+  // ── PARTE 2 — 6 exercícios com 3 níveis (FIFA 11+ original adaptado) ────
+  const p2 = [
+    {n:"Prancha Anterior", d:`${s}×${nivel===1?"25s":"35s"} · lombar neutra · Nível ${nivel}`},
+    {n:"Prancha Lateral", d:`${s}×${nivel===1?"20s":"30s"}/lado · quadril não afunda · Nível ${nivel}`},
+    {n:`Nordic Hamstring · Nível ${nivel}`, d:nivel===1?`${s}×5 · descida livre · segura com mãos`:`${s}×6 · descida 4s · sem apoio`},
+    {n:"Equilíbrio em Apoio Único com Gesto de Chute", d:`${s}×30s/lado · Nível ${nivel}${nivel===2?" · olhos fechados":""}`},
+    {n:"Agachamento Unilateral + Elevação de Panturrilha", d:`${s}×${nivel===1?"8":"10"}/lado · descida ${nivel===1?"60°":"90°"} · rise no topo`},
+    {n:"Salto Vertical com Controle de Aterrissagem", d:`${s}×${nivel===1?"5":"6"} · bilateral · aterrissagem amortecida${nivel===2?" + gesto de ataque no pico":""}`},
+  ];
+
+  // ── PARTE 3 — Corrida alta intensidade ───────────────────────────────────
+  const p3 = reduced ? [
+    {n:"Corrida com sprints curtos", d:"1 min · trote 10s + sprint 5s · 4 ciclos"},
+  ] : [
+    {n:"Corrida progressiva com sprints", d:"2 min · trote 10s + sprint 5s · 4 ciclos"},
+    {n:"Corrida com mudança de direção explosiva", d:"2×10m · 100% velocidade · corta ao sinal"},
+  ];
+
+  return { nivel, p1, p2, p3, reduced };
+}
+
+function buildFascia(w) {
+  return [
+    {text:"Rolo / bolinha tênis planta do pé D", detail:"60s varrendo + 30s em ponto de tensão"},
+    {text:"Gelo localizado arco medial", detail:w<=2?"8 min":"10 min"},
+    {text:"Excêntrico panturrilha unilateral", detail:`${w<=2?"2×12":"3×12"} · descida 3s`},
+    {text:"Alongamento panturrilha estático (joelho estendido + flexionado)", detail:"2×45s cada"},
+    {text:"Elevação MMII ao chegar em casa", detail:"5 min"},
+  ];
+}
+
+function buildFasciaLite() {
+  return [
+    {text:"Rolo bolinha planta do pé D", detail:"60s"},
+    {text:"Gelo arco medial", detail:"8 min"},
+    {text:"Alongamento panturrilha", detail:"2×45s"},
+  ];
+}
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let currentWeek = 0;
+let currentDay = 0;
+let timers = {};
+let timerIntervals = {};
+
+function getStorageKey(w, d, type) {
+  return `beachmed_gabi_w${w}_d${d}_${type}`;
+}
+
+function isDayDone(w, d) {
+  return localStorage.getItem(getStorageKey(w, d, 'done')) === '1';
+}
+
+function setDayDone(w, d, val) {
+  localStorage.setItem(getStorageKey(w, d, 'done'), val ? '1' : '0');
+}
+
+function isExDone(w, d, i) {
+  return localStorage.getItem(getStorageKey(w, d, `ex${i}`)) === '1';
+}
+
+function setExDone(w, d, i, val) {
+  localStorage.setItem(getStorageKey(w, d, `ex${i}`), val ? '1' : '0');
+}
+
+// ─── RENDER ──────────────────────────────────────────────────────────────────
+function render() {
+  renderWeekNav();
+  renderWeekFocus();
+  renderOverview();
+  renderDayNav();
+  renderMain();
+}
+
+function renderWeekNav() {
+  const nav = document.getElementById('weekNav');
+  nav.innerHTML = WEEKS.map((wk, i) =>
+    `<button class="week-btn ${i===currentWeek?'active':''}" onclick="selectWeek(${i})">${wk.label}</button>`
+  ).join('');
+}
+
+function renderWeekFocus() {
+  const el = document.getElementById('weekFocus');
+  const wk = WEEKS[currentWeek];
+  el.innerHTML = `<span class="label">S${wk.num}</span><span>${wk.focus}</span>`;
+}
+
+function renderOverview() {
+  const days = WEEKS[currentWeek].days;
+  const dayNames = ['SEG','TER','QUA','QUI','SEX','SÁB','DOM'];
+  const icons = days.map(d => d.icon);
+  const labels = ['Musculação','Futevôlei','Musculação','Futev.+Jogo','Musculação','Descanso','Descanso'];
+  const el = document.getElementById('weekOverview');
+  el.innerHTML = days.map((d, i) => {
+    const done = isDayDone(currentWeek, i);
+    return `<div class="ov-cell ${i===currentDay?'active':''} ${done?'done':''}" onclick="selectDay(${i})">
+      <div class="ov-day">${dayNames[i]}</div>
+      <div class="ov-type">${icons[i]}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderDayNav() {
+  const days = WEEKS[currentWeek].days;
+  const dayNames = ['SEG','TER','QUA','QUI','SEX','SÁB','DOM'];
+  const el = document.getElementById('dayNav');
+  el.innerHTML = days.map((d, i) => {
+    const done = isDayDone(currentWeek, i);
+    return `<button class="day-btn ${i===currentDay?'active':''} ${done?'done':''}" onclick="selectDay(${i})">${dayNames[i]}</button>`;
+  }).join('');
+}
+
+function renderMain() {
+  const day = WEEKS[currentWeek].days[currentDay];
+  const el = document.getElementById('mainContent');
+
+  if (day.rest) {
+    el.innerHTML = renderRestDay(day);
+    return;
+  }
+
+  let exCount = 0;
+  let exIndex = 0;
+
+  // Count all exercises for progress
+  day.blocks.forEach(b => {
+    if (b.exercises) exCount += b.exercises.length;
+    if (b.fifa) exCount += (b.fifa.p1.length + (b.fifa.p2?b.fifa.p2.length:0) + b.fifa.p3.length);
+    if (b.fasciaProtocol) exCount += b.fasciaProtocol.length;
+  });
+
+  let doneCount = 0;
+  for (let i = 0; i < exCount; i++) {
+    if (isExDone(currentWeek, currentDay, i)) doneCount++;
+  }
+
+  const pct = exCount > 0 ? Math.round((doneCount / exCount) * 100) : 0;
+  const dayDone = isDayDone(currentWeek, currentDay);
+
+  let html = '';
+
+  // Day header
+  html += `<div class="day-header">
+    <div class="day-title">${day.title}</div>
+    <div class="day-meta">
+      ${day.pills.map(p => `<span class="pill ${day.type==='areia'?'sand':''}">${p}</span>`).join('')}
+    </div>
+  </div>`;
+
+  // Semana badge
+  html += `<div class="prog-badge">S${WEEKS[currentWeek].num} · ${WEEKS[currentWeek].focus}</div>`;
+
+  // Alert / caution
+  if (day.alert) html += `<div class="alert-box"><strong>⚠ Atenção:</strong> ${day.alert}</div>`;
+  if (day.caution) html += `<div class="caution-box"><strong>Observação:</strong> ${day.caution}</div>`;
+
+  // Progress
+  html += `<div class="progress-strip">
+    <div class="progress-label"><span>Progresso da sessão</span><span>${doneCount}/${exCount} · ${pct}%</span></div>
+    <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+  </div>`;
+
+  // Blocks
+  day.blocks.forEach((block, bi) => {
+    const collKey = `block_${currentWeek}_${currentDay}_${bi}`;
+    const collapsed = localStorage.getItem(collKey) === '1';
+
+    html += `<div class="block ${collapsed?'collapsed':''}" id="block_${bi}">
+      <div class="block-header" onclick="toggleBlock(${bi})">
+        <div class="block-title-row">
+          <span class="block-icon">${block.icon}</span>
+          <span class="block-title">${block.title}</span>
+          ${block.tag ? `<span class="block-tag">${block.tag}</span>` : ''}
+        </div>
+        <span class="block-chevron">▾</span>
+      </div>
+      <div class="block-body">`;
+
+    // FIFA 11+
+    if (block.fifa) {
+      const f = block.fifa;
+      html += `<div class="steps-list">
+        <div class="step-item"><div class="step-num">P1</div><div class="step-text"><strong>Corrida · 8 min</strong></div></div>`;
+      f.p1.forEach((s, si) => {
+        const ei = exIndex++;
+        const chk = isExDone(currentWeek, currentDay, ei);
+        html += `<div class="step-item" style="padding-left:8px">
+          <div class="step-num">${si+1}</div>
+          <div class="step-text"><strong>${s.n}</strong><div class="step-detail">${s.d}</div></div>
+          <button class="ex-done-btn ${chk?'checked':''}" onclick="toggleEx(${ei})">${chk?'✓':''}</button>
+        </div>`;
+      });
+      if (f.p2 && f.p2.length) {
+        html += `<div class="step-item"><div class="step-num">P2</div><div class="step-text"><strong>Força · Equilíbrio · Pliometria · ${f.reduced?'8':'10'} min</strong> <span style="font-size:10px;color:var(--areia)">6 exercícios · ${f.nivel===2?'↑ Nível 2':'Nível 1'}</span></div></div>`;
+        f.p2.forEach((s, si) => {
+          const ei = exIndex++;
+          const chk = isExDone(currentWeek, currentDay, ei);
+          html += `<div class="step-item" style="padding-left:8px">
+            <div class="step-num">${si+1}</div>
+            <div class="step-text"><strong>${s.n}</strong><div class="step-detail">${s.d}</div></div>
+            <button class="ex-done-btn ${chk?'checked':''}" onclick="toggleEx(${ei})">${chk?'✓':''}</button>
+          </div>`;
+        });
+      }
+      html += `<div class="step-item"><div class="step-num">P3</div><div class="step-text"><strong>Corrida Alta Intensidade · 2 min</strong></div></div>`;
+      f.p3.forEach((s, si) => {
+        const ei = exIndex++;
+        const chk = isExDone(currentWeek, currentDay, ei);
+        html += `<div class="step-item" style="padding-left:8px">
+          <div class="step-num">${si+1}</div>
+          <div class="step-text"><strong>${s.n}</strong><div class="step-detail">${s.d}</div></div>
+          <button class="ex-done-btn ${chk?'checked':''}" onclick="toggleEx(${ei})">${chk?'✓':''}</button>
+        </div>`;
+      });
+      html += `</div>`;
+    }
+
+    // Fascia protocol
+    if (block.fasciaProtocol) {
+      html += `<div class="steps-list">`;
+      block.fasciaProtocol.forEach((s, si) => {
+        const ei = exIndex++;
+        const chk = isExDone(currentWeek, currentDay, ei);
+        html += `<div class="step-item">
+          <div class="step-num">→</div>
+          <div class="step-text"><strong>${s.text}</strong><div class="step-detail">${s.detail}</div></div>
+          <button class="ex-done-btn ${chk?'checked':''}" onclick="toggleEx(${ei})">${chk?'✓':''}</button>
+        </div>`;
+      });
+      html += `</div>`;
+    }
+
+    // Regular exercises
+    if (block.exercises && block.exercises.length > 0) {
+      block.exercises.forEach((ex, ei_local) => {
+        const ei = exIndex++;
+        const chk = isExDone(currentWeek, currentDay, ei);
+        const timerId = `t_${bi}_${ei_local}`;
+
+        html += `<div class="exercise">
+          <div class="ex-num">${String(ei_local+1).padStart(2,'0')}</div>
+          <div>
+            <div class="ex-name">${ex.name}</div>
+            <div class="ex-detail">${ex.detail}</div>
+            ${ex.tags && ex.tags.length ? `<div class="ex-tags">${ex.tags.map(t =>
+              `<span class="ex-tag ${t.includes('monitor')||t.includes('alert')?'alert':t.includes('OK')||t.includes('seguro')?'ok':''}">${t}</span>`
+            ).join('')}</div>` : ''}
+            ${ex.note ? `<div class="ex-note ${ex.note.toLowerCase().includes('dor')&&ex.note.toLowerCase().includes('joelho')?'red':''}">${ex.note}</div>` : ''}
+            ${ex.rest ? `<div class="timer-row" id="tr_${timerId}">
+              <div class="timer-display" id="td_${timerId}">${formatTime(ex.rest.s)}</div>
+              <div class="timer-label">⏸ ${ex.rest.label}</div>
+              <button class="timer-btn" id="tb_${timerId}" onclick="startTimer('${timerId}',${ex.rest.s})">INICIAR</button>
+            </div>` : ''}
+          </div>
+          <button class="ex-done-btn ${chk?'checked':''}" onclick="toggleEx(${ei})">${chk?'✓':''}</button>
+        </div>`;
+      });
+    }
+
+    html += `</div></div>`;
+  });
+
+  // Done button
+  html += `<button class="done-day-btn ${dayDone?'done':''}" onclick="toggleDayDone()">
+    ${dayDone ? '✓ Treino concluído' : 'Marcar treino como concluído'}
+  </button>`;
+
+  el.innerHTML = html;
+}
+
+function renderRestDay(day) {
+  const rc = day.restContent;
+  return `<div class="rest-day">
+    <div class="rest-icon">${rc.icon}</div>
+    <div class="rest-title">${rc.title}</div>
+    <div class="rest-desc">${rc.items.map(i => `<p style="margin-bottom:6px">· ${i}</p>`).join('')}</div>
+  </div>`;
+}
+
+// ─── INTERACTIONS ─────────────────────────────────────────────────────────────
+function selectWeek(i) {
+  currentWeek = i;
+  currentDay = 0;
+  render();
+}
+
+function selectDay(i) {
+  currentDay = i;
+  renderMain();
+  renderDayNav();
+  renderOverview();
+}
+
+function toggleBlock(bi) {
+  const block = document.getElementById(`block_${bi}`);
+  const collapsed = block.classList.toggle('collapsed');
+  localStorage.setItem(`block_${currentWeek}_${currentDay}_${bi}`, collapsed ? '1' : '0');
+}
+
+function toggleEx(ei) {
+  const cur = isExDone(currentWeek, currentDay, ei);
+  setExDone(currentWeek, currentDay, ei, !cur);
+  renderMain();
+  renderDayNav();
+  renderOverview();
+}
+
+function toggleDayDone() {
+  const cur = isDayDone(currentWeek, currentDay);
+  setDayDone(currentWeek, currentDay, !cur);
+  renderMain();
+  renderDayNav();
+  renderOverview();
+}
+
+function formatTime(s) {
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+}
+
+function startTimer(id, total) {
+  if (timerIntervals[id]) {
+    clearInterval(timerIntervals[id]);
+    delete timerIntervals[id];
+    timers[id] = total;
+    const td = document.getElementById(`td_${id}`);
+    const tb = document.getElementById(`tb_${id}`);
+    if (td) td.textContent = formatTime(total);
+    if (tb) { tb.textContent = 'INICIAR'; tb.classList.remove('running'); }
+    return;
+  }
+  timers[id] = timers[id] || total;
+  const tb = document.getElementById(`tb_${id}`);
+  if (tb) { tb.textContent = 'PARAR'; tb.classList.add('running'); }
+  timerIntervals[id] = setInterval(() => {
+    timers[id]--;
+    const td = document.getElementById(`td_${id}`);
+    if (td) td.textContent = formatTime(Math.max(0, timers[id]));
+    if (timers[id] <= 0) {
+      clearInterval(timerIntervals[id]);
+      delete timerIntervals[id];
+      timers[id] = total;
+      const tb2 = document.getElementById(`tb_${id}`);
+      const td2 = document.getElementById(`td_${id}`);
+      if (tb2) { tb2.textContent = 'INICIAR'; tb2.classList.remove('running'); }
+      if (td2) td2.textContent = formatTime(total);
+    }
+  }, 1000);
+}
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+render();
+</script>
+</body>
+</html>
